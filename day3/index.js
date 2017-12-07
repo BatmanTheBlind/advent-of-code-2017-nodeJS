@@ -110,4 +110,83 @@ while (spiral[y][x] !== 1) {
   x = xOfMin
   y = yOfMin
 }
-console.log(`Number of step: ${numberOfStep}`)
+console.log(`PartI: number of steps is ${numberOfStep}`)
+
+/* ************* PART II ********************* */
+
+// reinit the square / spiral
+for (let i = 0; i < sideLength; i++) {
+  spiral[i] = []
+  for (let j = 0; j < sideLength; j++) {
+    spiral[i][j] = 0
+  }
+}
+x = center
+y = center
+currentValue = 1
+indexMove = 0
+previousMoveIndex = -1
+nextMove = spiralMovement[indexMove]
+spiral[y][x] = currentValue
+
+// build the spiral by iterating the move list
+while (currentValue < input) {
+  switch (nextMove) {
+    case 'up':
+      y -= 1
+      break
+    case 'left':
+      x -= 1
+      break
+    case 'down':
+      y += 1
+      break
+    case 'right':
+      x += 1
+      break
+  }
+
+  // if the cell is free
+  if (spiral[y][x] === 0) {
+    // update current value
+    currentValue = 0
+    const moveList = [-1, 0, 1]
+    moveList.forEach(moveX => {
+      moveList.forEach(moveY => {
+        const newX = x + moveX
+        const newY = y + moveY
+        // is newX and newY a valid position in the square
+        if (newX < sideLength && newY < sideLength && newX > -1 && newY > -1) {
+          currentValue += spiral[newY][newX]
+        }
+      })
+    })
+    // set the value inside the cell
+    spiral[y][x] = currentValue
+    // store the previous index of the move for the next iteration
+    previousMoveIndex = indexMove
+    // get the next move
+    indexMove = (indexMove + 1) % 4
+    nextMove = spiralMovement[indexMove]
+  } else {
+    // if the cell wasn't free, cancel the move
+    switch (nextMove) {
+      case 'up':
+        y += 1
+        break
+      case 'left':
+        x += 1
+        break
+      case 'down':
+        y -= 1
+        break
+      case 'right':
+        x -= 1
+        break
+    }
+    // and restore the previous move to try to another cell
+    indexMove = previousMoveIndex
+    nextMove = spiralMovement[indexMove]
+  }
+}
+console.log(`Part II: the first value larger than ${input} is ${currentValue}`)
