@@ -10,3 +10,5 @@ Example :
 ```
 node day1/index.js
 ```
+
+If you use [Visual Studio Code](https://code.visualstudio.com/), you can also hit `F5` when you have one of the script open to run it with debugger (usefull to add some breakpoint and understand how the code works)
